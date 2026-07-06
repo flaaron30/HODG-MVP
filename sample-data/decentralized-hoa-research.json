@@ -1,0 +1,25 @@
+{
+  "title": "Decentralized HOA Research Agenda",
+  "core_claims": [
+    "Traditional HOAs can reduce transparency and homeowner freedom.",
+    "Service DAO can manage proposals, service contracts, treasury, and voting.",
+    "Quadratic voting captures preference intensity better than one-lot-one-vote.",
+    "DID and ZK proofs improve private eligibility and voting.",
+    "Rotating contractor marketplace can reduce locked-in vendor risk."
+  ],
+  "mvp_entities": [
+    "community",
+    "resident",
+    "proposal",
+    "vote",
+    "document",
+    "contractor",
+    "service_task",
+    "audit_event"
+  ],
+  "non_goals": [
+    "replace attorney",
+    "execute real treasury payments",
+    "dissolve HOA without legal process"
+  ]
+}

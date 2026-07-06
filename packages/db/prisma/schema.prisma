@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Community {
+  id        String   @id @default(cuid())
+  name      String
+  state     String?
+  createdAt DateTime @default(now())
+  residents Resident[]
+  proposals Proposal[]
+  documents Document[]
+}
+
+model Resident {
+  id          String   @id @default(cuid())
+  communityId String
+  did         String   @unique
+  displayName String?
+  createdAt   DateTime @default(now())
+  community   Community @relation(fields: [communityId], references: [id])
+  votes       Vote[]
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  communityId String
+  title       String
+  sourceType  String   @default("hoa_document")
+  rawText     String
+  analysis    Json?
+  createdAt   DateTime @default(now())
+  community   Community @relation(fields: [communityId], references: [id])
+  facts       ExtractedFact[]
+  proposals   Proposal[]
+}
+
+model ExtractedFact {
+  id          String   @id @default(cuid())
+  documentId  String
+  category    String
+  label       String
+  text        String
+  evidence    String?
+  confidence  Float    @default(0.65)
+  createdAt   DateTime @default(now())
+  document    Document @relation(fields: [documentId], references: [id])
+}
+
+model Proposal {
+  id          String   @id @default(cuid())
+  communityId String
+  documentId  String?
+  title       String
+  body        String
+  status      String   @default("draft")
+  policyFlags Json?
+  requiredApprovals Json?
+  aiDraft     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  community   Community @relation(fields: [communityId], references: [id])
+  document    Document? @relation(fields: [documentId], references: [id])
+  votes       Vote[]
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  proposalId String
+  residentId String
+  votes      Int
+  cost       Int
+  createdAt  DateTime @default(now())
+  proposal   Proposal @relation(fields: [proposalId], references: [id])
+  resident   Resident @relation(fields: [residentId], references: [id])
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  actorDid  String?
+  action    String
+  payload   Json
+  previousHash String?
+  payloadHash  String
+  eventHash    String   @unique
+  createdAt DateTime @default(now())
+}

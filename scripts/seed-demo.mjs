@@ -1,0 +1,1 @@
+console.log("Demo seed placeholder: import communities, proposals, contractors, and audit events here.");
